@@ -1,69 +1,155 @@
-import Image from "next/image";
+import { PlusIcon } from "@phosphor-icons/react/ssr";
+import { BotCard } from "@/components/bots/BotCard";
+import { CommunityCard } from "@/components/community/CommunityCard";
+import { ToolCard } from "@/components/ecosystem/ToolCard";
+import { GuideCard } from "@/components/guides/GuideCard";
+import { Hero } from "@/components/home/Hero";
+import { OnboardingSteps } from "@/components/home/OnboardingSteps";
+import { UpdateCard } from "@/components/updates/UpdateCard";
+import { ButtonLink } from "@/components/ui/Button";
+import { Container } from "@/components/ui/Container";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { bots } from "@/content/bots";
+import { communities } from "@/content/community";
+import { guides } from "@/content/guides";
+import { site } from "@/content/site";
+import { tools } from "@/content/tools";
+import { updates } from "@/content/updates";
 
-export default function Home() {
+export default function HomePage() {
+  const featuredGuides = [
+    guides.find((guide) => guide.level === "beginner"),
+    guides.find((guide) => guide.level === "admin"),
+    guides[1],
+  ].filter((guide) => guide !== undefined);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <Hero />
+
+      <section aria-labelledby="novedades" className="py-14 sm:py-20">
+        <Container>
+          <SectionHeader
+            id="novedades"
+            eyebrow="Novedades"
+            title="Lo último de Fluxer, traducido"
+            description="Cada vez que Hampus o Elías anuncian algo, lo traducimos para que no te pierdas nada."
+            link={{ href: "/novedades", label: "Ver todas" }}
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {updates.slice(0, 3).map((update) => (
+              <UpdateCard key={update.slug} update={update} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="empieza" className="border-y border-line bg-surface-muted/60 py-14 sm:py-20">
+        <Container>
+          <SectionHeader
+            id="empieza"
+            eyebrow="Primeros pasos"
+            title="Empieza en tres pasos"
+            description="Sin prisas y a tu ritmo. Si te pierdes, pregunta: para eso estamos."
+          />
+          <OnboardingSteps />
+        </Container>
+      </section>
+
+      <section aria-labelledby="guias" className="py-14 sm:py-20">
+        <Container>
+          <SectionHeader
+            id="guias"
+            eyebrow="Centro de guías"
+            title="Aprende a tu nivel"
+            description="Tutoriales para quien acaba de llegar y para quien administra un servidor."
+            link={{ href: "/guias", label: "Todas las guías" }}
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {featuredGuides.map((guide) => (
+              <GuideCard key={guide.slug} guide={guide} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="bots" className="py-14 sm:py-20">
+        <Container>
+          <SectionHeader
+            id="bots"
+            eyebrow="Directorio de bots"
+            title="Bots que hablan tu idioma"
+            description="Revisados por la comunidad y marcados según su soporte en español."
+            link={{ href: "/bots", label: "Ver el directorio" }}
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {bots
+              .filter((bot) => bot.language === "es")
+              .slice(0, 3)
+              .map((bot) => (
+                <BotCard key={bot.id} bot={bot} />
+              ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="ecosistema" className="border-y border-line bg-surface-muted/60 py-14 sm:py-20">
+        <Container>
+          <SectionHeader
+            id="ecosistema"
+            eyebrow="Ecosistema"
+            title="Herramientas, explicadas"
+            description="Enlaces útiles con una explicación sencilla de para qué sirve cada uno."
+            link={{ href: "/ecosistema", label: "Ver todo el ecosistema" }}
+          />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {tools.slice(0, 4).map((tool) => (
+              <ToolCard key={tool.id} tool={tool} compact />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="comunidades" className="py-14 sm:py-20">
+        <Container>
+          <SectionHeader
+            id="comunidades"
+            eyebrow="Rincón de la comunidad"
+            title="Comunidades en español"
+            description="Servidores hechos por gente como tú. Explora, únete y saluda."
+            link={{ href: "/comunidad", label: "Explorar comunidades" }}
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {communities.slice(0, 3).map((community) => (
+              <CommunityCard key={community.id} community={community} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="cta" className="pb-16 sm:pb-24">
+        <Container>
+          <div className="flex flex-col items-start gap-6 rounded-3xl bg-primary-soft p-8 sm:p-12 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-xl">
+              <h2 id="cta" className="text-2xl font-extrabold text-on-primary-soft sm:text-3xl">
+                ¿Tienes una comunidad en español?
+              </h2>
+              <p className="mt-2 text-on-primary-soft/85">
+                Añádela al directorio para que más gente la descubra. Es gratis y lo revisamos a mano.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+              <ButtonLink href="/comunidad/enviar" size="lg">
+                <PlusIcon size={18} weight="bold" aria-hidden />
+                Añade tu comunidad
+              </ButtonLink>
+              <ButtonLink href={site.inviteUrl} variant="secondary" size="lg">
+                Únete al servidor
+              </ButtonLink>
+            </div>
+          </div>
+        </Container>
+      </section>
+    </>
   );
 }
