@@ -1,4 +1,4 @@
-import { ClockIcon, ShieldStarIcon, SparkleIcon } from "@phosphor-icons/react/ssr";
+import { ClockIcon, PlantIcon, ShieldStarIcon } from "@phosphor-icons/react/ssr";
 import { Badge } from "@/components/ui/Badge";
 import type { GuideLevel, GuideSummary } from "@/lib/types";
 
@@ -8,9 +8,9 @@ const levelLabels: Record<GuideLevel, string> = {
 };
 
 export function GuideLevelBadge({ level }: { level: GuideLevel }) {
-  const Icon = level === "beginner" ? SparkleIcon : ShieldStarIcon;
+  const Icon = level === "beginner" ? PlantIcon : ShieldStarIcon;
   return (
-    <Badge tone={level === "beginner" ? "success" : "primary"}>
+    <Badge tone={level === "beginner" ? "success" : "primary"} className="self-start">
       <Icon size={15} weight="bold" aria-hidden />
       {levelLabels[level]}
     </Badge>

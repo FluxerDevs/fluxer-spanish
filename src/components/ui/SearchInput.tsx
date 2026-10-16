@@ -24,7 +24,7 @@ export function SearchInput({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="min-h-12 w-full rounded-full border border-line bg-surface pr-4 pl-11 text-base text-fg placeholder:text-fg-muted/80 focus:border-primary"
+        className="min-h-12 w-full rounded-xl border border-line bg-surface pr-4 pl-11 text-base text-fg placeholder:text-fg-muted/80 focus:border-primary"
       />
     </label>
   );

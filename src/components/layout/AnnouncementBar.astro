@@ -1,5 +1,5 @@
 ---
-import { ArrowRightIcon, MegaphoneSimpleIcon } from "@phosphor-icons/react/ssr";
+import { MegaphoneSimpleIcon } from "@phosphor-icons/react/ssr";
 import { DismissAnnouncement } from "@/components/layout/DismissAnnouncement";
 import type { Update } from "@/lib/types";
 import { href } from "@/lib/url";
@@ -19,10 +19,9 @@ const label = update.kind === "build" ? "Nueva build" : "Novedad";
       <span class="font-bold">{label}:</span>{" "}
       <a
         href={href(`/novedades/${update.slug}`)}
-        class="group inline-flex flex-wrap items-center gap-1 underline decoration-on-primary/40 underline-offset-4 hover:decoration-on-primary"
+        class="underline decoration-on-primary/40 underline-offset-4 hover:decoration-on-primary"
       >
-        {update.title} — léelo en español
-        <ArrowRightIcon size={16} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
+        {update.title}. Léelo en español
       </a>
     </p>
     <DismissAnnouncement client:idle id={update.slug} />

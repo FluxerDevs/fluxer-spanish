@@ -3,7 +3,7 @@ import type { Tool, ToolGroup } from "@/lib/types";
 export const toolGroupLabels: Record<ToolGroup, { title: string; description: string }> = {
   tools: {
     title: "Herramientas",
-    description: "Servicios que te facilitan la vida dentro y fuera de Fluxer.",
+    description: "Servicios para tu cuenta, tu perfil y tus propios bots.",
   },
   feedback: {
     title: "Feedback y soporte",

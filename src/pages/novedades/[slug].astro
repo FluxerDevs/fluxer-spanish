@@ -2,7 +2,7 @@
 import {
   ArrowSquareOutIcon,
   BugBeetleIcon,
-  SparkleIcon,
+  PlusCircleIcon,
   TranslateIcon,
   TrendUpIcon,
 } from "@phosphor-icons/react/ssr";
@@ -25,8 +25,8 @@ interface Props {
 
 const { update } = Astro.props;
 
-const sectionIcons: Record<ChangelogSection["title"], typeof SparkleIcon> = {
-  Nuevo: SparkleIcon,
+const sectionIcons: Record<ChangelogSection["title"], typeof PlusCircleIcon> = {
+  Nuevo: PlusCircleIcon,
   Mejoras: TrendUpIcon,
   Correcciones: BugBeetleIcon,
 };
