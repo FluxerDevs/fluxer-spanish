@@ -33,3 +33,23 @@ export function UpdateCard({ update }: { update: Update }) {
     </article>
   );
 }
+
+/** Compact row for the home page: date, type and title, newest first. */
+export function UpdateRow({ update }: { update: Update }) {
+  return (
+    <li className="group relative grid gap-1 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">
+      <div className="flex items-center gap-2 text-sm text-fg-muted sm:flex-col sm:items-start sm:gap-1.5">
+        <time dateTime={update.date}>{formatDate(update.date)}</time>
+        <UpdateKindBadge update={update} />
+      </div>
+      <div>
+        <h3 className="font-heading text-lg font-bold">
+          <a href={href(`/novedades/${update.slug}`)} className="after:absolute after:inset-0 group-hover:text-primary">
+            {update.title}
+          </a>
+        </h3>
+        <p className="mt-1 text-[15px] text-fg-muted">{update.summary}</p>
+      </div>
+    </li>
+  );
+}

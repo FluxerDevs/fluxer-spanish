@@ -1,4 +1,5 @@
 ---
+import { ToolboxIcon } from "@phosphor-icons/react/ssr";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
 import Container from "@/components/ui/Container.astro";
 import { PageHeader } from "@/components/ui/SectionHeader";
@@ -11,9 +12,9 @@ const groups = Object.keys(toolGroupLabels) as ToolGroup[];
 
 <SiteLayout title="Ecosistema y herramientas" description="Fluxer.host, Fluxername, feedback y más: enlaces útiles explicados en español.">
   <PageHeader
-      eyebrow="Ecosistema"
-      title="Herramientas, explicadas en sencillo"
-      description="Todo lo que rodea a Fluxer, con una explicación corta de para qué sirve cada cosa."
+      icon={ToolboxIcon}
+      title="Ecosistema"
+      description="Webs, servicios y proyectos alrededor de Fluxer, con una explicación corta de para qué sirve cada uno."
     >
       <nav aria-label="Grupos" class="mt-6 flex flex-wrap gap-2">
         {groups.map((group) => (

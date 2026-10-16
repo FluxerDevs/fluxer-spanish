@@ -1,4 +1,4 @@
-import { GithubLogoIcon, HeartIcon, XLogoIcon } from "@phosphor-icons/react/ssr";
+import { GithubLogoIcon, HandHeartIcon, XLogoIcon } from "@phosphor-icons/react/ssr";
 import { LogoMark } from "@/components/layout/Logo";
 import { Avatar } from "@/components/ui/Avatar";
 import { mainNav, site } from "@/data/site";
@@ -10,10 +10,11 @@ export function SiteFooter() {
     <footer className="mt-auto border-t border-line bg-surface-muted/60">
       <section aria-labelledby="equipo" className="border-b border-line">
         <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
-          <h2 id="equipo" className="text-xl font-extrabold">
+          <h2 id="equipo" className="flex items-center gap-2.5 text-xl font-extrabold">
+            <HandHeartIcon size={24} aria-hidden className="shrink-0 text-primary" />
             Equipo de Fluxer Español
           </h2>
-          <p className="mt-1 text-fg-muted">Las personas que mantienen viva esta comunidad.</p>
+          <p className="mt-1 text-fg-muted">Quién modera el servidor, traduce las novedades y mantiene esta web.</p>
           <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {team.map((member) => (
               <li
@@ -81,13 +82,6 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-line">
-        <p className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-1.5 px-4 py-5 text-sm text-fg-muted sm:px-6">
-          Hecho con
-          <HeartIcon size={16} weight="fill" aria-label="cariño" className="text-primary" />
-          por la comunidad, para la comunidad.
-        </p>
-      </div>
     </footer>
   );
 }

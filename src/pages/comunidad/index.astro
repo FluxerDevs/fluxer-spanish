@@ -1,5 +1,5 @@
 ---
-import { PlusIcon } from "@phosphor-icons/react/ssr";
+import { LayoutIcon, PlusIcon, UsersThreeIcon, VideoCameraIcon } from "@phosphor-icons/react/ssr";
 import { CommunityDirectory } from "@/components/community/CommunityDirectory";
 import { CreatorCard } from "@/components/community/CreatorCard";
 import { TemplateCard } from "@/components/community/TemplateCard";
@@ -18,14 +18,14 @@ const sections = [
 
 <SiteLayout title="Rincón de la comunidad" description="Comunidades en español para unirte, plantillas de servidor preconfiguradas y creadores hispanos en Fluxer.">
   <PageHeader
-      eyebrow="Rincón de la comunidad"
-      title="Hecho por gente como tú"
-      description="Explora comunidades en español, monta tu servidor con una plantilla y conoce a creadores hispanos."
+      icon={UsersThreeIcon}
+      title="Comunidad"
+      description="Servidores en español para unirte, plantillas para montar el tuyo y creadores hispanos que están en Fluxer."
     >
       <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
         <ButtonLink href="/comunidad/enviar">
           <PlusIcon size={18} weight="bold" aria-hidden />
-          Añade tu comunidad
+          Añadir mi servidor
         </ButtonLink>
         <nav aria-label="Secciones de la página" class="flex flex-wrap gap-2">
           {sections.map((section) => (
@@ -44,9 +44,11 @@ const sections = [
       <Container>
         <SectionHeader
           id="comunidades"
+          icon={UsersThreeIcon}
           title="Comunidades en español"
-          description="Servidores revisados por el equipo. Únete al que más te guste."
+          description="Servidores revisados por el equipo antes de aparecer aquí."
         />
+        <p class="-mt-5 mb-6 text-sm text-fg-muted">Datos de ejemplo: el equipo aún está preparando el directorio.</p>
         <CommunityDirectory client:visible communities={communities} />
       </Container>
     </section>
@@ -55,6 +57,7 @@ const sections = [
       <Container>
         <SectionHeader
           id="plantillas"
+          icon={LayoutIcon}
           title="Plantillas de servidor"
           description="Canales y roles ya organizados, con nombres en español. Úsalas tal cual o adáptalas."
         />
@@ -70,9 +73,11 @@ const sections = [
       <Container>
         <SectionHeader
           id="creadores"
+          icon={VideoCameraIcon}
           title="Creadores hispanos"
           description="Streamers, artistas y divulgadores de la comunidad que están en Fluxer."
         />
+        <p class="-mt-5 mb-6 text-sm text-fg-muted">Datos de ejemplo: el equipo aún está preparando la lista.</p>
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {creators.map((creator) => (
             <CreatorCard creator={creator} />

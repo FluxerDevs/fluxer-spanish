@@ -1,18 +1,23 @@
 ---
-import { PlusIcon } from "@phosphor-icons/react/ssr";
+import {
+  BookOpenTextIcon,
+  MegaphoneSimpleIcon,
+  PlusIcon,
+  RobotIcon,
+  ToolboxIcon,
+  UsersThreeIcon,
+} from "@phosphor-icons/react/ssr";
 import { BotCard } from "@/components/bots/BotCard";
 import { CommunityCard } from "@/components/community/CommunityCard";
-import { ToolCard } from "@/components/ecosystem/ToolCard";
+import { ToolRow } from "@/components/ecosystem/ToolCard";
 import { GuideCard } from "@/components/guides/GuideCard";
 import { Hero } from "@/components/home/Hero";
-import { OnboardingSteps } from "@/components/home/OnboardingSteps";
-import { UpdateCard } from "@/components/updates/UpdateCard";
+import { UpdateRow } from "@/components/updates/UpdateCard";
 import { ButtonLink } from "@/components/ui/Button";
 import Container from "@/components/ui/Container.astro";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { bots } from "@/data/bots";
 import { communities } from "@/data/community";
-import { site } from "@/data/site";
 import { tools } from "@/data/tools";
 import { updates } from "@/data/updates";
 import SiteLayout from "@/layouts/SiteLayout.astro";
@@ -24,132 +29,99 @@ const featuredGuides = [
   guides.find((guide) => guide.level === "admin"),
   guides.filter((guide) => guide.level === "beginner")[1],
 ].filter((guide) => guide !== undefined);
+const listedTools = tools.filter((tool) => tool.url !== "#").slice(0, 6);
 ---
 
 <SiteLayout>
-    <Hero />
+  <Hero />
 
-    <section aria-labelledby="novedades" class="py-14 sm:py-20">
-      <Container>
-        <SectionHeader
-          id="novedades"
-          eyebrow="Novedades"
-          title="Lo último de Fluxer, traducido"
-          description="Cada vez que Hampus o Elías anuncian algo, lo traducimos para que no te pierdas nada."
-          link={{ href: "/novedades", label: "Ver todas" }}
-        />
-        <div class="grid gap-4 md:grid-cols-3">
-          {updates.slice(0, 3).map((update) => (
-            <UpdateCard update={update} />
-          ))}
-        </div>
-      </Container>
-    </section>
+  <section aria-labelledby="novedades" class="border-y border-line bg-surface-muted/60 py-14 sm:py-16">
+    <Container>
+      <SectionHeader
+        id="novedades"
+        icon={MegaphoneSimpleIcon}
+        title="Novedades"
+        description="Lo que anuncian Hampus y Elías, traducido al español con enlace al original."
+        link={{ href: "/novedades", label: "Todas las novedades" }}
+      />
+      <ul class="divide-y divide-line border-t border-line">
+        {updates.slice(0, 3).map((update) => <UpdateRow update={update} />)}
+      </ul>
+    </Container>
+  </section>
 
-    <section aria-labelledby="empieza" class="border-y border-line bg-surface-muted/60 py-14 sm:py-20">
-      <Container>
-        <SectionHeader
-          id="empieza"
-          eyebrow="Primeros pasos"
-          title="Empieza en tres pasos"
-          description="Sin prisas y a tu ritmo. Si te pierdes, pregunta: para eso estamos."
-        />
-        <OnboardingSteps />
-      </Container>
-    </section>
+  <section aria-labelledby="guias" class="py-14 sm:py-20">
+    <Container>
+      <SectionHeader
+        id="guias"
+        icon={BookOpenTextIcon}
+        title="Guías"
+        description="Para quien acaba de llegar y para quien administra un servidor."
+        link={{ href: "/guias", label: "Todas las guías" }}
+      />
+      <div class="grid gap-4 md:grid-cols-3">
+        {featuredGuides.map((guide) => <GuideCard guide={guide} />)}
+      </div>
+    </Container>
+  </section>
 
-    <section aria-labelledby="guias" class="py-14 sm:py-20">
-      <Container>
-        <SectionHeader
-          id="guias"
-          eyebrow="Centro de guías"
-          title="Aprende a tu nivel"
-          description="Tutoriales para quien acaba de llegar y para quien administra un servidor."
-          link={{ href: "/guias", label: "Todas las guías" }}
-        />
-        <div class="grid gap-4 md:grid-cols-3">
-          {featuredGuides.map((guide) => (
-            <GuideCard guide={guide} />
-          ))}
-        </div>
-      </Container>
-    </section>
+  <section aria-labelledby="ecosistema" class="pb-14 sm:pb-20">
+    <Container>
+      <SectionHeader
+        id="ecosistema"
+        icon={ToolboxIcon}
+        title="Ecosistema"
+        description="Webs y servicios alrededor de Fluxer, con una línea sobre para qué sirve cada uno."
+        link={{ href: "/ecosistema", label: "Ver el ecosistema" }}
+      />
+      <ul class="grid gap-x-10 border-t border-line sm:grid-cols-2 [&>li]:border-b [&>li]:border-line">
+        {listedTools.map((tool) => <ToolRow tool={tool} />)}
+      </ul>
+    </Container>
+  </section>
 
-    <section aria-labelledby="bots" class="py-14 sm:py-20">
-      <Container>
-        <SectionHeader
-          id="bots"
-          eyebrow="Directorio de bots"
-          title="Bots que hablan tu idioma"
-          description="Revisados por la comunidad y marcados según su soporte en español."
-          link={{ href: "/bots", label: "Ver el directorio" }}
-        />
-        <div class="grid gap-4 md:grid-cols-3">
-          {bots
+  <section aria-labelledby="bots" class="border-y border-line bg-surface-muted/60 py-14 sm:py-20">
+    <Container>
+      <SectionHeader
+        id="bots"
+        icon={RobotIcon}
+        title="Bots"
+        description="Bots con comandos en español. En el directorio también hay útiles que solo están en inglés, marcados como tal."
+        link={{ href: "/bots", label: "Ver el directorio" }}
+      />
+      <div class="grid gap-4 md:grid-cols-3">
+        {
+          bots
             .filter((bot) => bot.language === "es")
             .slice(0, 3)
-            .map((bot) => (
-              <BotCard bot={bot} />
-            ))}
-        </div>
-      </Container>
-    </section>
+            .map((bot) => <BotCard bot={bot} />)
+        }
+      </div>
+    </Container>
+  </section>
 
-    <section aria-labelledby="ecosistema" class="border-y border-line bg-surface-muted/60 py-14 sm:py-20">
-      <Container>
-        <SectionHeader
-          id="ecosistema"
-          eyebrow="Ecosistema"
-          title="Herramientas, explicadas"
-          description="Enlaces útiles con una explicación sencilla de para qué sirve cada uno."
-          link={{ href: "/ecosistema", label: "Ver todo el ecosistema" }}
-        />
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {tools.slice(0, 4).map((tool) => (
-            <ToolCard tool={tool} compact />
-          ))}
-        </div>
-      </Container>
-    </section>
-
-    <section aria-labelledby="comunidades" class="py-14 sm:py-20">
-      <Container>
-        <SectionHeader
-          id="comunidades"
-          eyebrow="Rincón de la comunidad"
-          title="Comunidades en español"
-          description="Servidores hechos por gente como tú. Explora, únete y saluda."
-          link={{ href: "/comunidad", label: "Explorar comunidades" }}
-        />
-        <div class="grid gap-4 md:grid-cols-3">
-          {communities.slice(0, 3).map((community) => (
-            <CommunityCard community={community} />
-          ))}
-        </div>
-      </Container>
-    </section>
-
-    <section aria-labelledby="cta" class="pb-16 sm:pb-24">
-      <Container>
-        <div class="flex flex-col items-start gap-6 rounded-3xl bg-primary-soft p-8 sm:p-12 md:flex-row md:items-center md:justify-between">
-          <div class="max-w-xl">
-            <h2 id="cta" class="text-2xl font-extrabold text-on-primary-soft sm:text-3xl">
-              ¿Tienes una comunidad en español?
-            </h2>
-            <p class="mt-2 text-on-primary-soft/85">
-              Añádela al directorio para que más gente la descubra. Es gratis y lo revisamos a mano.
-            </p>
-          </div>
-          <div class="flex shrink-0 flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/comunidad/enviar" size="lg">
-              <PlusIcon size={18} weight="bold" aria-hidden />
-              Añade tu comunidad
-            </ButtonLink>
-            <ButtonLink href={site.inviteUrl} variant="secondary" size="lg">
-              Únete al servidor
-            </ButtonLink>
-          </div>
-        </div>
-      </Container>
-    </section>
+  <section aria-labelledby="comunidades" class="py-14 sm:py-20">
+    <Container>
+      <SectionHeader
+        id="comunidades"
+        icon={UsersThreeIcon}
+        title="Comunidades en español"
+        description="Servidores de la comunidad hispana en Fluxer."
+        link={{ href: "/comunidad", label: "Ver todas" }}
+      />
+      <div class="grid gap-4 md:grid-cols-3">
+        {communities.slice(0, 3).map((community) => <CommunityCard community={community} />)}
+      </div>
+      <div class="mt-8 flex flex-col gap-4 rounded-2xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="max-w-xl">
+          <strong class="font-heading">¿Tienes un servidor en español?</strong>
+          <span class="text-fg-muted"> Mándalo y lo añadimos al directorio después de revisarlo.</span>
+        </p>
+        <ButtonLink href="/comunidad/enviar">
+          <PlusIcon size={18} weight="bold" aria-hidden />
+          Añadir mi servidor
+        </ButtonLink>
+      </div>
+    </Container>
+  </section>
 </SiteLayout>
