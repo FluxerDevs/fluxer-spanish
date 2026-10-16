@@ -1,6 +1,6 @@
-import { CopyIcon, HashIcon, SpeakerHighIcon } from "@phosphor-icons/react/ssr";
+import { HashIcon, SpeakerHighIcon } from "@phosphor-icons/react/ssr";
 import { Badge } from "@/components/ui/Badge";
-import { buttonClasses } from "@/components/ui/Button";
+import { PendingAction } from "@/components/ui/Button";
 import type { ServerTemplate } from "@/lib/types";
 
 export function TemplateCard({ template }: { template: ServerTemplate }) {
@@ -43,10 +43,8 @@ export function TemplateCard({ template }: { template: ServerTemplate }) {
       </ul>
 
       <div className="mt-auto pt-5">
-        <a href="#" className={buttonClasses("secondary", "md", "w-full")}>
-          <CopyIcon size={18} aria-hidden />
-          Usar plantilla
-        </a>
+        {/* TODO: link to the Fluxer template once the staff publishes it. */}
+        <PendingAction label="Usar plantilla" className="w-full" />
       </div>
     </article>
   );

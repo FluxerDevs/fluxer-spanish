@@ -17,7 +17,7 @@ const sizes: Record<Size, string> = {
 
 export function buttonClasses(variant: Variant = "primary", size: Size = "md", className?: string) {
   return cx(
-    "inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold whitespace-nowrap transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50",
+    "inline-flex items-center justify-center gap-2 rounded-xl text-center font-semibold whitespace-nowrap transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50",
     variants[variant],
     sizes[size],
     className,
@@ -52,4 +52,30 @@ type ButtonProps = React.ComponentProps<"button"> & { variant?: Variant; size?: 
 
 export function Button({ variant, size, className, type = "button", ...props }: ButtonProps) {
   return <button type={type} className={buttonClasses(variant, size, className)} {...props} />;
+}
+
+/** Placeholder data uses "#" until the real link exists. */
+export function isPendingUrl(url: string | undefined) {
+  return !url || url === "#";
+}
+
+/** Stand-in for an action whose link isn't ready yet: looks like the button, can't be clicked. */
+export function PendingAction({
+  label,
+  variant = "secondary",
+  className,
+}: {
+  label: string;
+  variant?: Variant;
+  className?: string;
+}) {
+  return (
+    <span
+      aria-disabled="true"
+      className={buttonClasses(variant, "md", cx("cursor-not-allowed opacity-60 hover:bg-transparent", className))}
+    >
+      {label}
+      <span className="text-xs font-normal">(próximamente)</span>
+    </span>
+  );
 }

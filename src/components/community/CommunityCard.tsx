@@ -1,7 +1,7 @@
 import { MapPinIcon, UsersIcon } from "@phosphor-icons/react/ssr";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
-import { buttonClasses } from "@/components/ui/Button";
+import { buttonClasses, isPendingUrl, PendingAction } from "@/components/ui/Button";
 import { communityTopicLabels } from "@/data/community";
 import { formatNumber } from "@/lib/format";
 import type { Community } from "@/lib/types";
@@ -34,13 +34,17 @@ export function CommunityCard({ community }: { community: Community }) {
         ))}
       </ul>
       <div className="mt-auto pt-5">
-        <a
-          href={community.inviteUrl}
-          className={buttonClasses("secondary", "md", "w-full")}
-          aria-label={`Unirse a ${community.name}`}
-        >
-          Unirse
-        </a>
+        {isPendingUrl(community.inviteUrl) ? (
+          <PendingAction label="Unirse" className="w-full" />
+        ) : (
+          <a
+            href={community.inviteUrl}
+            className={buttonClasses("secondary", "md", "w-full")}
+            aria-label={`Unirse a ${community.name}`}
+          >
+            Unirse
+          </a>
+        )}
       </div>
     </article>
   );
