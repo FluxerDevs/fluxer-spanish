@@ -1,0 +1,9 @@
+---
+// Starlight's <head>, plus the site's Nunito fonts.
+import { Font } from "astro:assets";
+import Default from "@astrojs/starlight/components/Head.astro";
+---
+
+<Default><slot /></Default>
+<Font cssVariable="--font-nunito" preload />
+<Font cssVariable="--font-nunito-sans" preload />

@@ -1,0 +1,23 @@
+---
+// Guide title with its level badge and reading time under it.
+import { ClockIcon } from "@phosphor-icons/react/ssr";
+import Default from "@astrojs/starlight/components/PageTitle.astro";
+import { GuideLevelBadge } from "@/components/guides/GuideCard";
+
+const { level, readMinutes } = Astro.locals.starlightRoute.entry.data;
+---
+
+<Default />
+{
+  (level || readMinutes) && (
+    <div class="not-content mt-3 flex flex-wrap items-center gap-3 text-sm text-fg-muted">
+      {level && <GuideLevelBadge level={level} />}
+      {readMinutes && (
+        <span class="inline-flex items-center gap-1.5">
+          <ClockIcon size={16} aria-hidden />
+          {readMinutes} min de lectura
+        </span>
+      )}
+    </div>
+  )
+}

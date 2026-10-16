@@ -1,0 +1,32 @@
+---
+// Bottom of the mobile docs menu: the main site nav and the theme toggle.
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { mainNav } from "@/data/site";
+import { href } from "@/lib/url";
+---
+
+<div class="border-t border-line pt-4">
+  <p class="px-2 text-sm font-bold text-fg-muted">Más de Fluxer Español</p>
+  <ul class="m-0 mt-2 flex list-none flex-col p-0">
+    <li class="m-0">
+      <a href={href("/")} class="flex min-h-11 items-center rounded-xl px-2 font-semibold text-fg no-underline hover:bg-surface-muted">
+        Inicio
+      </a>
+    </li>
+    {
+      mainNav
+        .filter((item) => item.href !== "/guias")
+        .map((item) => (
+          <li class="m-0">
+            <a href={href(item.href)} class="flex min-h-11 items-center rounded-xl px-2 font-semibold text-fg no-underline hover:bg-surface-muted">
+              {item.label}
+            </a>
+          </li>
+        ))
+    }
+  </ul>
+  <div class="mt-3 flex items-center justify-between border-t border-line pt-3">
+    <span class="px-2 text-sm text-fg-muted">Tema</span>
+    <ThemeToggle client:load />
+  </div>
+</div>

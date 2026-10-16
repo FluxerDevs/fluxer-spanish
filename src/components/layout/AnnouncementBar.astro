@@ -1,0 +1,30 @@
+---
+import { ArrowRightIcon, MegaphoneSimpleIcon } from "@phosphor-icons/react/ssr";
+import { DismissAnnouncement } from "@/components/layout/DismissAnnouncement";
+import type { Update } from "@/lib/types";
+import { href } from "@/lib/url";
+
+interface Props {
+  update: Update;
+}
+
+const { update } = Astro.props;
+const label = update.kind === "build" ? "Nueva build" : "Novedad";
+---
+
+<div data-announcement class="bg-primary text-on-primary">
+  <div class="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-2 sm:px-6">
+    <MegaphoneSimpleIcon size={20} aria-hidden className="hidden shrink-0 sm:block" />
+    <p class="min-w-0 flex-1 text-[15px] leading-snug">
+      <span class="font-bold">{label}:</span>{" "}
+      <a
+        href={href(`/novedades/${update.slug}`)}
+        class="group inline-flex flex-wrap items-center gap-1 underline decoration-on-primary/40 underline-offset-4 hover:decoration-on-primary"
+      >
+        {update.title} — léelo en español
+        <ArrowRightIcon size={16} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
+      </a>
+    </p>
+    <DismissAnnouncement client:idle id={update.slug} />
+  </div>
+</div>

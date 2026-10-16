@@ -1,0 +1,30 @@
+---
+import { PlusIcon } from "@phosphor-icons/react/ssr";
+import { BotDirectory } from "@/components/bots/BotDirectory";
+import { ButtonLink } from "@/components/ui/Button";
+import Container from "@/components/ui/Container.astro";
+import { PageHeader } from "@/components/ui/SectionHeader";
+import { bots } from "@/data/bots";
+import { site } from "@/data/site";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Directorio de bots" description="Bots para Fluxer con soporte en español, filtrados por categoría. También bots útiles en inglés, bien señalados.">
+  <PageHeader
+      eyebrow="Directorio de bots"
+      title="Bots para tu servidor"
+      description="Elegidos por la comunidad. Te indicamos claramente cuáles hablan español y cuáles no."
+    >
+      <div class="mt-6">
+        <ButtonLink href={site.socials.github} variant="secondary">
+          <PlusIcon size={18} weight="bold" aria-hidden />
+          Sugerir un bot
+        </ButtonLink>
+      </div>
+    </PageHeader>
+    <section aria-label="Bots" class="py-12 sm:py-16">
+      <Container>
+        <BotDirectory client:load bots={bots} />
+      </Container>
+    </section>
+</SiteLayout>

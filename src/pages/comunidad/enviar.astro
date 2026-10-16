@@ -1,0 +1,45 @@
+---
+import { ArrowLeftIcon, CheckIcon } from "@phosphor-icons/react/ssr";
+import { SubmitCommunityForm } from "@/components/community/SubmitCommunityForm";
+import Container from "@/components/ui/Container.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { href } from "@/lib/url";
+
+const checklist = [
+  "La comunidad habla principalmente en español.",
+  "Tiene normas claras y moderación activa.",
+  "El enlace de invitación no caduca.",
+];
+---
+
+<SiteLayout title="Añade tu comunidad" description="Envía tu comunidad en español para que aparezca en el directorio de Fluxer Español.">
+  <Container class="py-10 sm:py-14">
+    <a href={href("/comunidad")} class="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-fg-muted hover:text-primary">
+      <ArrowLeftIcon size={16} aria-hidden />
+      Volver a la comunidad
+    </a>
+
+    <div class="mt-4 grid gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <h1 class="text-3xl font-extrabold sm:text-4xl">Añade tu comunidad</h1>
+        <p class="mt-3 text-lg text-fg-muted">
+          ¿Tienes un servidor en español? Cuéntanos de qué va y lo añadimos al directorio para
+          que más gente lo descubra.
+        </p>
+        <div class="mt-8 rounded-2xl bg-surface-muted p-5">
+          <h2 class="font-heading font-bold">Antes de enviarla, comprueba que:</h2>
+          <ul class="mt-3 space-y-2 text-[15px]">
+            {checklist.map((item) => (
+              <li class="flex gap-2">
+                <CheckIcon size={18} weight="bold" aria-hidden className="mt-0.5 shrink-0 text-success" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p class="mt-4 text-sm text-fg-muted">Revisamos cada solicitud a mano, normalmente en pocos días.</p>
+        </div>
+      </div>
+      <SubmitCommunityForm client:load />
+    </div>
+  </Container>
+</SiteLayout>

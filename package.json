@@ -3,30 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "astro dev",
+    "build": "astro build",
     "lint": "eslint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^7.1.0",
+    "@astrojs/starlight": "^0.42.6",
+    "@astrojs/starlight-tailwind": "^5.0.0",
     "@phosphor-icons/react": "^2.1.10",
-    "next": "16.4.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
-    "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.1",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "^9.1.7",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.71.2"
   },
   "packageManager": "pnpm@11.25.0"
 }

@@ -1,0 +1,54 @@
+---
+import { Font } from "astro:assets";
+import AnnouncementBar from "@/components/layout/AnnouncementBar.astro";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import SiteHeader from "@/components/layout/SiteHeader.astro";
+import { site } from "@/data/site";
+import { updates } from "@/data/updates";
+import { href } from "@/lib/url";
+import "@/styles/site.css";
+
+interface Props {
+  /** Page title; omitted on the home page. */
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · La comunidad hispana de Fluxer`;
+const latestUpdate = updates[0];
+
+// Runs before first paint. Same storage key and fallback as Starlight's ThemeProvider, so /guias and
+// the rest of the site share one theme. Also hides an announcement the visitor already dismissed.
+const prePaintScript = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("starlight-theme");d.dataset.theme=t==="light"||t==="dark"?t:matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";if(localStorage.getItem("announcement-dismissed")===${JSON.stringify(latestUpdate.slug)})d.dataset.hideAnnouncement=""}catch(e){}})()`;
+---
+
+<!doctype html>
+<html lang="es" class="h-full antialiased">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16131b" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href={href("/favicon.ico")} />
+    <script is:inline set:html={prePaintScript} />
+    <Font cssVariable="--font-nunito" preload />
+    <Font cssVariable="--font-nunito-sans" preload />
+  </head>
+  <body class="flex min-h-full flex-col">
+    <a
+      href="#contenido"
+      class="sr-only z-50 rounded-full bg-primary px-4 py-2 font-semibold text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+    >
+      Saltar al contenido
+    </a>
+    <AnnouncementBar update={latestUpdate} />
+    <SiteHeader />
+    <main id="contenido" tabindex="-1" class="flex-1 outline-none">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

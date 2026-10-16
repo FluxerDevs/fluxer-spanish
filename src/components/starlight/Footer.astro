@@ -1,0 +1,11 @@
+---
+// Starlight's footer (edit link, pagination) plus the site's unofficial-community notice.
+import Default from "@astrojs/starlight/components/Footer.astro";
+import { href } from "@/lib/url";
+---
+
+<Default><slot /></Default>
+<p class="mt-8 border-t border-line pt-6 text-sm text-fg-muted">
+  <strong class="font-semibold text-fg">Comunidad no oficial.</strong> Fluxer Español está hecho por voluntarios y no tiene
+  relación oficial con Fluxer. <a href={href("/")} class="font-semibold text-primary">Volver al inicio</a>
+</p>

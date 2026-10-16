@@ -1,0 +1,25 @@
+---
+// The site header inside /guias: same logo, nav and controls as the rest of the site,
+// plus Starlight's search. Below 50rem the nav moves into the docs menu (MobileMenuFooter).
+import Search from "@astrojs/starlight/components/Search.astro";
+import { LoginButton } from "@/components/layout/LoginButton";
+import { Logo } from "@/components/layout/Logo";
+import MainNav from "@/components/layout/MainNav.astro";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
+---
+
+<div class="flex h-full items-center gap-4">
+  <div class="shrink-0">
+    <Logo />
+  </div>
+  <MainNav class="hidden min-[50rem]:block" />
+  <div class="ml-auto flex items-center gap-2 print:hidden">
+    <Search />
+    <div class="hidden min-[50rem]:block">
+      <ThemeToggle client:load />
+    </div>
+    <div class="hidden xl:block">
+      <LoginButton client:idle />
+    </div>
+  </div>
+</div>

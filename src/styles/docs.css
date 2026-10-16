@@ -1,0 +1,75 @@
+/* Starlight (/guias) styles: Starlight's Tailwind setup plus the site's tokens. */
+@layer base, starlight, theme, components, utilities;
+
+@import "@astrojs/starlight-tailwind";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "./tokens.css";
+
+/* Starlight doesn't ship Tailwind Preflight, so reset the site's own controls (header, toggles). */
+@layer base {
+  button {
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    border: 0;
+    padding: 0;
+  }
+}
+
+/* Map Starlight's palette onto the site tokens. Unlayered so it wins over
+   @astrojs/starlight-tailwind, which sets these inside the utilities layer. */
+:root[data-theme="light"] {
+  --sl-color-white: var(--fg);
+  --sl-color-gray-1: #3a3242;
+  --sl-color-gray-2: #4a4255;
+  --sl-color-gray-3: var(--fg-muted);
+  --sl-color-gray-4: #8c8497;
+  --sl-color-gray-5: var(--line-strong);
+  --sl-color-gray-6: var(--line);
+  --sl-color-gray-7: var(--surface-muted);
+  --sl-color-black: var(--bg);
+  --sl-color-accent-low: var(--primary-soft);
+  --sl-color-accent: var(--primary);
+  --sl-color-accent-high: var(--on-primary-soft);
+}
+
+:root[data-theme="dark"] {
+  --sl-color-white: var(--fg);
+  --sl-color-gray-1: #ddd7e6;
+  --sl-color-gray-2: #c9c1d4;
+  --sl-color-gray-3: var(--fg-muted);
+  --sl-color-gray-4: #7d7389;
+  --sl-color-gray-5: var(--line-strong);
+  --sl-color-gray-6: var(--line);
+  --sl-color-black: var(--bg);
+  --sl-color-accent-low: var(--primary-soft);
+  --sl-color-accent: var(--primary);
+  --sl-color-accent-high: var(--on-primary-soft);
+}
+
+:root {
+  --sl-font: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif;
+  --sl-color-bg-nav: var(--bg);
+  --sl-color-bg-sidebar: var(--bg);
+  --sl-color-hairline-light: var(--line);
+  --sl-color-hairline: var(--line);
+  --sl-color-hairline-shade: var(--line);
+  --sl-line-height: 1.7;
+  /* Tip asides use Starlight's purple; use the site's purple instead. */
+  --sl-color-purple-low: var(--primary-soft);
+  --sl-color-purple: var(--primary);
+  --sl-color-purple-high: var(--on-primary-soft);
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4),
+h1#_top {
+  font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

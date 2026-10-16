@@ -1,0 +1,20 @@
+---
+title: Roles y permisos sin dolores de cabeza
+description: Cómo pensar los roles, sincronizar permisos por categoría y evitar sustos.
+level: admin
+readMinutes: 8
+sidebar:
+  order: 2
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+Los permisos se heredan: servidor → categoría → canal. Entender este orden te ahorra la mayoría de problemas.
+
+- Da a @everyone solo lo imprescindible.
+- Crea roles por función (Moderación, Eventos), no por persona.
+- Usa permisos por categoría y sincroniza los canales.
+
+<Aside type="caution" title="Importante">
+  Nunca des «Administrador» a un bot si no es estrictamente necesario.
+</Aside>
