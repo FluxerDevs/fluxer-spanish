@@ -34,15 +34,17 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Build static export
+      - name: Build static site
         run: pnpm build
         env:
           # "/<repo>" on github.io, or "" when a custom domain is set.
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Used for canonical URLs and the sitemap.
+          PAGES_SITE: ${{ steps.pages.outputs.origin }}
 
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: out
+          path: dist
 
   deploy:
     needs: build
