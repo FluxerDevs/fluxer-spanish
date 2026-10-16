@@ -1,9 +1,8 @@
-<!-- BEGIN:nextjs-agent-rules -->
+## Stack: Astro 7 + Starlight
 
-## This is NOT the Next.js you know
+This site runs on Astro 7 and Starlight 0.42, which may differ from your training data. Check the installed packages (`node_modules/astro/dist/types/public/config.d.ts`, `node_modules/@astrojs/starlight/dist/`) and their docs before using an API.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- Code and identifiers in English; UI copy and URL slugs in Spanish.
+- Internal links use `href()` from `src/lib/url.ts` (GitHub Pages base path).
+- Theme is shared with Starlight through `localStorage["starlight-theme"]` and `<html data-theme>`.
+- Commits follow Conventional Commits (commitlint runs on `commit-msg`).

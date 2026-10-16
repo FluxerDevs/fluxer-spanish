@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fluxer Español
 
-## Getting Started
+Community site for Spanish-speaking Fluxer users: translated updates, guides, a bot directory, ecosystem tools and community listings. Built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build) (guides at `/guias`). Code is in English; UI copy and URLs are in Spanish.
 
-First, run the development server:
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev       # http://localhost:4321
+pnpm check     # type-check (astro check)
+pnpm lint
+pnpm build     # static site in dist/
+pnpm preview
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `src/pages/` — site pages (home, novedades, bots, ecosistema, comunidad, 404).
+- `src/content/docs/guias/` — guides as MDX. Folders match the sidebar groups in `astro.config.mjs`; frontmatter `level` and `readMinutes` drive the badges and home page previews.
+- `src/data/` — placeholder data (updates, bots, tools, communities, team).
+- `src/components/` — UI. React components render statically; the ones with a `client:*` directive in a page are interactive islands. `src/components/starlight/` holds the Starlight overrides that give `/guias` the site header and theme.
+- `src/styles/` — `tokens.css` (shared colors), `site.css` (site pages), `docs.css` (Starlight).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Internal links must go through `href()` from `src/lib/url.ts` so they work under the GitHub Pages base path.
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+Pushing to `main` deploys to GitHub Pages (`.github/workflows/pages.yml`), which sets `PAGES_BASE_PATH` and `PAGES_SITE` for the build.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) (checked by commitlint).
