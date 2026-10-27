@@ -17,11 +17,16 @@ import { ButtonLink } from "@/components/ui/Button";
 import Container from "@/components/ui/Container.astro";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { bots } from "@/data/bots";
-import { communities } from "@/data/community";
 import { tools } from "@/data/tools";
 import { updates } from "@/data/updates";
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import { getGuides } from "@/lib/guides";
+import { listCommunities } from "@/lib/server/communities";
+
+// Shows approved communities, bots and tools from the database.
+export const prerender = false;
+
+const communities = await listCommunities();
 
 const guides = await getGuides();
 const featuredGuides = [

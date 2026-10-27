@@ -6,8 +6,14 @@ import { TemplateCard } from "@/components/community/TemplateCard";
 import { ButtonLink } from "@/components/ui/Button";
 import Container from "@/components/ui/Container.astro";
 import { PageHeader, SectionHeader } from "@/components/ui/SectionHeader";
-import { communities, creators, templates } from "@/data/community";
+import { creators, templates } from "@/data/community";
 import SiteLayout from "@/layouts/SiteLayout.astro";
+import { listCommunities } from "@/lib/server/communities";
+
+// Approved communities come from the database.
+export const prerender = false;
+
+const communities = await listCommunities();
 
 const sections = [
   { id: "comunidades", label: "Comunidades" },

@@ -10,7 +10,7 @@ export function BotCard({ bot }: { bot: Bot }) {
   return (
     <article className="flex h-full flex-col rounded-2xl border border-line bg-surface p-5">
       <div className="flex items-start gap-3">
-        <Avatar name={bot.name} hue={bot.hue} shape="rounded" />
+        <Avatar name={bot.name} hue={bot.hue} src={bot.iconUrl} shape="rounded" />
         <div className="min-w-0 flex-1">
           <h3 className="text-lg font-bold">{bot.name}</h3>
           <div className="mt-1">

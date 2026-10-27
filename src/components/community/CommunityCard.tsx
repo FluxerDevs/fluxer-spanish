@@ -1,4 +1,4 @@
-import { MapPinIcon, UsersIcon } from "@phosphor-icons/react/ssr";
+import { CircleIcon, MapPinIcon, UsersIcon } from "@phosphor-icons/react/ssr";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses, isPendingUrl, PendingAction } from "@/components/ui/Button";
@@ -10,7 +10,7 @@ export function CommunityCard({ community }: { community: Community }) {
   return (
     <article className="flex h-full flex-col rounded-2xl border border-line bg-surface p-5">
       <div className="flex items-start gap-3">
-        <Avatar name={community.name} hue={community.hue} shape="rounded" />
+        <Avatar name={community.name} hue={community.hue} src={community.iconUrl} shape="rounded" />
         <div className="min-w-0">
           <h3 className="text-lg font-bold">{community.name}</h3>
           <p className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-fg-muted">
@@ -18,10 +18,18 @@ export function CommunityCard({ community }: { community: Community }) {
               <UsersIcon size={15} aria-hidden />
               {formatNumber(community.members)} miembros
             </span>
-            <span className="inline-flex items-center gap-1">
-              <MapPinIcon size={15} aria-hidden />
-              {community.country}
-            </span>
+            {community.online !== undefined && (
+              <span className="inline-flex items-center gap-1">
+                <CircleIcon size={10} weight="fill" aria-hidden className="text-success" />
+                {formatNumber(community.online)} en línea
+              </span>
+            )}
+            {community.country && (
+              <span className="inline-flex items-center gap-1">
+                <MapPinIcon size={15} aria-hidden />
+                {community.country}
+              </span>
+            )}
           </p>
         </div>
       </div>
