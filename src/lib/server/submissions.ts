@@ -1,7 +1,7 @@
-import { and, count, eq } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import { PENDING_LIMIT, type FieldErrors } from "@/lib/submission-rules";
 import { db } from "./db";
-import { botSubmissions, communitySubmissions, toolSubmissions } from "./schema";
+import { botSubmissions, communitySubmissions, toolSubmissions, type SubmissionStatus } from "./schema";
 
 export const submissionTables = {
   community: communitySubmissions,
@@ -27,6 +27,38 @@ export async function hasTooManyPending(userId: string) {
     total += row?.value ?? 0;
   }
   return total >= PENDING_LIMIT;
+}
+
+export interface SubmissionSummary {
+  kind: SubmissionKind;
+  id: number;
+  name: string;
+  status: SubmissionStatus;
+  reviewNote: string | null;
+  createdAt: Date;
+}
+
+/** Everything a user has sent, newest first, for /cuenta. */
+export async function listUserSubmissions(userId: string): Promise<SubmissionSummary[]> {
+  const all = await Promise.all(
+    (Object.entries(submissionTables) as [SubmissionKind, (typeof submissionTables)[SubmissionKind]][]).map(
+      async ([kind, table]) => {
+        const rows = await db()
+          .select({
+            id: table.id,
+            name: table.name,
+            status: table.status,
+            reviewNote: table.reviewNote,
+            createdAt: table.createdAt,
+          })
+          .from(table)
+          .where(eq(table.submitterId, userId))
+          .orderBy(desc(table.createdAt));
+        return rows.map((row) => ({ kind, ...row }));
+      },
+    ),
+  );
+  return all.flat().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 }
 
 export const tooManyPendingMessage = `Ya tienes ${PENDING_LIMIT} envíos pendientes. Espera a que el equipo los revise.`;

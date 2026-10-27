@@ -24,6 +24,8 @@ export type GuideLevel = "beginner" | "admin";
 
 /** Card data for a guide, built from the Starlight docs collection. */
 export interface GuideSummary {
+  /** Docs entry ID, e.g. "guias/principiantes/personaliza-tu-perfil". Favorites store this. */
+  id: string;
   href: string;
   title: string;
   description: string;

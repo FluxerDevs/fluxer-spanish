@@ -8,6 +8,7 @@ export async function getGuides(): Promise<GuideSummary[]> {
   return entries
     .sort((a, b) => (a.data.sidebar.order ?? 0) - (b.data.sidebar.order ?? 0))
     .map((entry) => ({
+      id: entry.id,
       href: href(`/${entry.id}`),
       title: entry.data.title,
       description: entry.data.description ?? "",

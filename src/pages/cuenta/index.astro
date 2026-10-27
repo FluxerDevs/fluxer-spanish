@@ -1,0 +1,114 @@
+---
+import { BookmarkSimpleIcon, PaperPlaneTiltIcon, SignOutIcon } from "@phosphor-icons/react/ssr";
+import {
+  formatSubmittedAt,
+  SubmissionStatusBadge,
+  submissionKindLabels,
+} from "@/components/account/SubmissionStatus";
+import { GuideCard } from "@/components/guides/GuideCard";
+import { Avatar } from "@/components/ui/Avatar";
+import { buttonClasses, ButtonLink } from "@/components/ui/Button";
+import Container from "@/components/ui/Container.astro";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { getGuides } from "@/lib/guides";
+import { getUser } from "@/lib/server/auth";
+import { listFavoriteIds } from "@/lib/server/favorites";
+import { listUserSubmissions } from "@/lib/server/submissions";
+import { href } from "@/lib/url";
+
+export const prerender = false;
+
+const user = await getUser(Astro);
+if (!user) return Astro.redirect(`${href("/cuenta/entrar")}?volver=${encodeURIComponent(href("/cuenta"))}`);
+
+const [guides, favoriteIds, submissions] = await Promise.all([
+  getGuides(),
+  listFavoriteIds(user.id),
+  listUserSubmissions(user.id),
+]);
+const favoriteGuides = favoriteIds
+  .map((id) => guides.find((guide) => guide.id === id))
+  .filter((guide) => guide !== undefined);
+---
+
+<SiteLayout title="Mi cuenta">
+  <header class="border-b border-line bg-surface-muted/60">
+    <Container class="flex flex-col gap-5 py-12 sm:flex-row sm:items-center sm:justify-between sm:py-14">
+      <div class="flex items-center gap-4">
+        <Avatar name={user.name} hue={270} src={user.avatarUrl} size="lg" />
+        <div>
+          <h1 class="text-3xl font-extrabold sm:text-4xl">{user.name}</h1>
+          <p class="mt-1 text-fg-muted">{user.handle}</p>
+        </div>
+      </div>
+      <form method="post" action={href("/cuenta/salir")}>
+        <button type="submit" class={buttonClasses("secondary")}>
+          <SignOutIcon size={18} aria-hidden />
+          Cerrar sesión
+        </button>
+      </form>
+    </Container>
+  </header>
+
+  <section aria-labelledby="favoritas" class="py-12 sm:py-16">
+    <Container>
+      <SectionHeader id="favoritas" icon={BookmarkSimpleIcon} title="Guías guardadas" />
+      {
+        favoriteGuides.length > 0 ? (
+          <div class="grid gap-4 md:grid-cols-3">
+            {favoriteGuides.map((guide) => (
+              <GuideCard guide={guide} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Aún no has guardado ninguna guía"
+            description="Pulsa «Guardar» debajo del título de una guía y aparecerá aquí."
+            action={<ButtonLink href="/guias">Ver las guías</ButtonLink>}
+          />
+        )
+      }
+    </Container>
+  </section>
+
+  <section aria-labelledby="envios" class="border-t border-line py-12 sm:py-16">
+    <Container>
+      <SectionHeader
+        id="envios"
+        icon={PaperPlaneTiltIcon}
+        title="Mis envíos"
+        description="Comunidades, bots y herramientas que has enviado, y en qué punto está cada uno."
+      />
+      {
+        submissions.length > 0 ? (
+          <ul class="divide-y divide-line rounded-2xl border border-line bg-surface">
+            {submissions.map((item) => (
+              <li class="flex flex-col gap-2 p-5 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p class="font-bold">{item.name}</p>
+                  <p class="text-sm text-fg-muted">
+                    {submissionKindLabels[item.kind]} · enviado el {formatSubmittedAt(item.createdAt)}
+                  </p>
+                  {item.status === "rejected" && item.reviewNote && (
+                    <p class="mt-2 text-[15px]">
+                      <span class="font-semibold">Motivo:</span> {item.reviewNote}
+                    </p>
+                  )}
+                </div>
+                <SubmissionStatusBadge status={item.status} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <EmptyState
+            title="Todavía no has enviado nada"
+            description="Cuando añadas un servidor o sugieras un bot o una herramienta, verás aquí cómo va."
+            action={<ButtonLink href="/comunidad/enviar">Añadir mi servidor</ButtonLink>}
+          />
+        )
+      }
+    </Container>
+  </section>
+</SiteLayout>

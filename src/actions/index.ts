@@ -6,6 +6,7 @@ import { toolGroupLabels } from "@/data/tools";
 import { getAccessToken, getUser } from "@/lib/server/auth";
 import { submitBot } from "@/lib/server/bots";
 import { submitCommunity } from "@/lib/server/communities";
+import { listFavoriteIds, setFavorite } from "@/lib/server/favorites";
 import { FluxerError } from "@/lib/server/fluxer";
 import { submitTool } from "@/lib/server/tools";
 import type { BotCategory, BotLanguage, CommunityTopic, ToolGroup } from "@/lib/types";
@@ -80,5 +81,23 @@ export const server = {
       purpose: z.string().max(1000),
     }),
     handler: async (input, context) => submitTool(await requireUser(context), input),
+  }),
+
+  /** Saved guide IDs; empty when nobody is logged in, so guide pages can call it unconditionally. */
+  listFavorites: defineAction({
+    handler: async (_input, context): Promise<string[]> => {
+      const user = await getUser(context);
+      return user ? listFavoriteIds(user.id) : [];
+    },
+  }),
+
+  setFavorite: defineAction({
+    input: z.object({ guideId: z.string().max(200), saved: z.boolean() }),
+    handler: async ({ guideId, saved }, context) => {
+      const user = await requireUser(context);
+      const result = await setFavorite(user.id, guideId, saved);
+      if (result === null) throw new ActionError({ code: "NOT_FOUND", message: "Esta guía ya no existe." });
+      return result;
+    },
   }),
 };
