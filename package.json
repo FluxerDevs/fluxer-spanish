@@ -9,6 +9,7 @@
     "prepare": "husky",
     "preview": "astro preview",
     "check": "astro check",
+    "db:generate": "drizzle-kit generate",
     "astro": "astro"
   },
   "dependencies": {
