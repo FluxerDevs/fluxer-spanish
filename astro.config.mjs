@@ -2,16 +2,36 @@
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig, fontProviders } from "astro/config";
-
-// Set by the GitHub Pages workflow: "/<repo>" on github.io, "" with a custom domain.
-const base = process.env.PAGES_BASE_PATH || "/";
-const site = process.env.PAGES_SITE || undefined;
+import node from "@astrojs/node";
+import { defineConfig, envField, fontProviders, sessionDrivers } from "astro/config";
 
 export default defineConfig({
-  site,
-  base,
+  // Canonical URLs and the sitemap; the OAuth redirect URI uses SITE_URL at runtime instead.
+  site: process.env.SITE_URL || undefined,
+  // Pages are prerendered unless they set `prerender = false` (the ones that read the database).
   output: "static",
+  adapter: node({ mode: "standalone" }),
+  session: {
+    // Relative to the working directory, so it lands on the data volume in the container.
+    driver: sessionDrivers.fsLite({ base: ".data/sessions" }),
+    cookie: { name: "fluxer-es-session", sameSite: "lax" },
+    // Matches the Fluxer access token lifetime.
+    ttl: 60 * 60 * 24 * 7,
+  },
+  env: {
+    schema: {
+      SITE_URL: envField.string({ context: "server", access: "public", url: true, default: "http://localhost:4321" }),
+      FLUXER_API_URL: envField.string({ context: "server", access: "public", url: true, default: "https://api.fluxer.app" }),
+      FLUXER_MEDIA_URL: envField.string({ context: "server", access: "public", url: true, default: "https://fluxerusercontent.com" }),
+      FLUXER_CLIENT_ID: envField.string({ context: "server", access: "secret" }),
+      FLUXER_CLIENT_SECRET: envField.string({ context: "server", access: "secret" }),
+      // Comma-separated Fluxer user IDs that can open /moderacion.
+      STAFF_USER_IDS: envField.string({ context: "server", access: "secret", default: "" }),
+      // Fluxer webhook that gets a message for each new submission.
+      STAFF_WEBHOOK_URL: envField.string({ context: "server", access: "secret", url: true, optional: true }),
+      DATABASE_PATH: envField.string({ context: "server", access: "secret", default: ".data/fluxer-es.db" }),
+    },
+  },
   fonts: [
     {
       provider: fontProviders.google(),
