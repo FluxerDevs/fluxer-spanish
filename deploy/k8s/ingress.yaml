@@ -1,0 +1,22 @@
+# Replace the host (and the TLS secret, if the cluster doesn't issue certificates automatically).
+# SITE_URL in the Secret must be https://<this host>.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fluxer-spanish
+spec:
+  rules:
+    - host: fluxer-es.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fluxer-spanish
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - fluxer-es.example.com
+      secretName: fluxer-spanish-tls

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fluxer-spanish
+spec:
+  selector:
+    app: fluxer-spanish
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

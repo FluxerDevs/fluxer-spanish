@@ -19,10 +19,12 @@ export default defineConfig({
     ttl: 60 * 60 * 24 * 7,
   },
   env: {
+    // All "secret" so they're read from the environment at runtime instead of inlined at build:
+    // one image runs anywhere with its own SITE_URL.
     schema: {
-      SITE_URL: envField.string({ context: "server", access: "public", url: true, default: "http://localhost:4321" }),
-      FLUXER_API_URL: envField.string({ context: "server", access: "public", url: true, default: "https://api.fluxer.app" }),
-      FLUXER_MEDIA_URL: envField.string({ context: "server", access: "public", url: true, default: "https://fluxerusercontent.com" }),
+      SITE_URL: envField.string({ context: "server", access: "secret", url: true, default: "http://localhost:4321" }),
+      FLUXER_API_URL: envField.string({ context: "server", access: "secret", url: true, default: "https://api.fluxer.app" }),
+      FLUXER_MEDIA_URL: envField.string({ context: "server", access: "secret", url: true, default: "https://fluxerusercontent.com" }),
       FLUXER_CLIENT_ID: envField.string({ context: "server", access: "secret" }),
       FLUXER_CLIENT_SECRET: envField.string({ context: "server", access: "secret" }),
       // Comma-separated Fluxer user IDs that can open /moderacion.

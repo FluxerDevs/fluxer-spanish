@@ -1,0 +1,11 @@
+# Holds the SQLite database and the login sessions. Back it up by copying fluxer-es.db.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fluxer-spanish-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

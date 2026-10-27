@@ -1,0 +1,6 @@
+# kubectl apply -k deploy/k8s (after creating the Secret from secret.example.yaml)
+resources:
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml

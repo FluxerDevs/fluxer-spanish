@@ -1,0 +1,13 @@
+.git
+.github
+.claude
+.vscode
+.husky
+.astro
+.data
+dist
+node_modules
+deploy
+.env*
+!.env.example
+*.log
