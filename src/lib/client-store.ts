@@ -1,7 +1,8 @@
 import { useSyncExternalStore } from "react";
-import type { DemoUser } from "@/lib/types";
+import type { SessionState } from "@/lib/types";
+import { href } from "@/lib/url";
 
-// Tiny localStorage-backed stores for the mockup. Real auth replaces demoUser in Phase 3.
+// Small client-side stores: theme and announcement in localStorage, the session from the server.
 
 const CHANGE_EVENT = "fluxer-es:store-change";
 
@@ -14,18 +15,9 @@ function subscribe(callback: () => void) {
   };
 }
 
-function read(key: string) {
+function write(key: string, value: string) {
   try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function write(key: string, value: string | null) {
-  try {
-    if (value === null) localStorage.removeItem(key);
-    else localStorage.setItem(key, value);
+    localStorage.setItem(key, value);
   } catch {
     // Storage can be unavailable (private mode); the UI still updates via the event.
   }
@@ -49,24 +41,36 @@ export function setTheme(theme: Theme) {
   write(THEME_KEY, theme);
 }
 
-const USER_KEY = "demo-user";
+// Fetched once per page load and shared by every island (the header and mobile menu both need it).
+let session: SessionState | undefined;
+let sessionRequest: Promise<void> | undefined;
 
-export function useDemoUser() {
-  const raw = useSyncExternalStore(subscribe, () => read(USER_KEY), () => null);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as DemoUser;
-  } catch {
-    return null;
-  }
+function loadSession() {
+  sessionRequest ??= fetch(href("/api/sesion"), { credentials: "same-origin" })
+    .then((response) => (response.ok ? (response.json() as Promise<SessionState>) : null))
+    .catch(() => null)
+    .then((state) => {
+      session = state ?? { user: null, isStaff: false };
+      window.dispatchEvent(new Event(CHANGE_EVENT));
+    });
 }
 
-export function signInDemo() {
-  write(USER_KEY, JSON.stringify({ name: "Usuario Demo", handle: "@demo" } satisfies DemoUser));
+/** The logged-in user, or `undefined` while it's loading. */
+export function useSession() {
+  return useSyncExternalStore(
+    (callback) => {
+      loadSession();
+      return subscribe(callback);
+    },
+    () => session,
+    () => undefined,
+  );
 }
 
-export function signOutDemo() {
-  write(USER_KEY, null);
+/** Where "Entrar con Fluxer" goes; it comes back to the current page afterwards. */
+export function loginUrl() {
+  const back = `${location.pathname}${location.search}${location.hash}`;
+  return `${href("/cuenta/entrar")}?volver=${encodeURIComponent(back)}`;
 }
 
 export const ANNOUNCEMENT_KEY = "announcement-dismissed";

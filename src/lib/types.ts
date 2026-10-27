@@ -50,8 +50,9 @@ export interface Bot {
   language: BotLanguage;
   inviteUrl: string;
   website?: string;
-  /** Hue (0-360) used for the placeholder avatar. */
+  /** Hue (0-360) for the initials avatar shown when there's no icon. */
   hue: number;
+  iconUrl?: string;
 }
 
 export type ToolGroup = "tools" | "feedback" | "misc";
@@ -91,9 +92,12 @@ export interface Community {
   description: string;
   topics: CommunityTopic[];
   members: number;
-  country: string;
+  /** Online right now; only known for communities read from Fluxer. */
+  online?: number;
+  country?: string;
   inviteUrl: string;
   hue: number;
+  iconUrl?: string;
 }
 
 export interface Creator {
@@ -113,7 +117,17 @@ export interface TeamMember {
   hue: number;
 }
 
-export interface DemoUser {
+/** The logged-in Fluxer account, as the browser sees it. */
+export interface SessionUser {
+  id: string;
+  /** Display name, falling back to the username. */
   name: string;
+  /** "@username" */
   handle: string;
+  avatarUrl?: string;
+}
+
+export interface SessionState {
+  user: SessionUser | null;
+  isStaff: boolean;
 }

@@ -6,20 +6,38 @@ const sizes = {
   lg: "size-16 text-xl",
 };
 
-/** Initials avatar used for placeholder data until real images exist. */
+/** Image avatar from Fluxer when there is one, otherwise initials on a tinted background. */
 export function Avatar({
   name,
   hue,
+  src,
   size = "md",
   shape = "circle",
   className,
 }: {
   name: string;
   hue: number;
+  src?: string;
   size?: keyof typeof sizes;
   shape?: "circle" | "rounded";
   className?: string;
 }) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        className={cx(
+          "shrink-0 bg-surface-muted object-cover",
+          shape === "circle" ? "rounded-full" : "rounded-2xl",
+          sizes[size],
+          className,
+        )}
+      />
+    );
+  }
   return (
     <span
       role="img"

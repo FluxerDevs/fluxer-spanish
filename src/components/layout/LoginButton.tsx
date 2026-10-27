@@ -1,13 +1,18 @@
 import { useId, useRef, useState } from "react";
-import { CheckIcon, SignInIcon, SignOutIcon, XIcon } from "@phosphor-icons/react/ssr";
+import { CheckIcon, ShieldCheckIcon, SignInIcon, SignOutIcon, UserIcon, XIcon } from "@phosphor-icons/react/ssr";
 import { Avatar } from "@/components/ui/Avatar";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClasses } from "@/components/ui/Button";
 import { LogoMark } from "@/components/layout/Logo";
-import { signInDemo, signOutDemo, useDemoUser } from "@/lib/client-store";
+import { loginUrl, useSession } from "@/lib/client-store";
 import { cx } from "@/lib/format";
+import { href } from "@/lib/url";
+
+const menuItemClasses =
+  "flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left font-semibold hover:bg-surface-muted";
 
 export function LoginButton({ className }: { className?: string }) {
-  const user = useDemoUser();
+  const session = useSession();
+  const user = session?.user;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const titleId = useId();
@@ -23,7 +28,7 @@ export function LoginButton({ className }: { className?: string }) {
           onClick={() => setMenuOpen((open) => !open)}
           className="inline-flex size-11 items-center justify-center rounded-full hover:bg-surface-muted"
         >
-          <Avatar name={user.name} hue={270} size="sm" />
+          <Avatar name={user.name} hue={270} src={user.avatarUrl} size="sm" />
         </button>
         {menuOpen && (
           <div
@@ -32,19 +37,24 @@ export function LoginButton({ className }: { className?: string }) {
           >
             <p className="px-3 pt-1 pb-2 text-sm">
               <span className="block font-bold">{user.name}</span>
-              <span className="text-fg-muted">{user.handle} · demo</span>
+              <span className="text-fg-muted">{user.handle}</span>
             </p>
-            <button
-              type="button"
-              onClick={() => {
-                setMenuOpen(false);
-                signOutDemo();
-              }}
-              className="flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left font-semibold hover:bg-surface-muted"
-            >
-              <SignOutIcon size={18} aria-hidden />
-              Cerrar sesión
-            </button>
+            <a href={href("/cuenta")} className={menuItemClasses}>
+              <UserIcon size={18} aria-hidden />
+              Mi cuenta
+            </a>
+            {session.isStaff && (
+              <a href={href("/moderacion")} className={menuItemClasses}>
+                <ShieldCheckIcon size={18} aria-hidden />
+                Moderación
+              </a>
+            )}
+            <form method="post" action={href("/cuenta/salir")}>
+              <button type="submit" className={menuItemClasses}>
+                <SignOutIcon size={18} aria-hidden />
+                Cerrar sesión
+              </button>
+            </form>
           </div>
         )}
       </div>
@@ -95,18 +105,18 @@ export function LoginButton({ className }: { className?: string }) {
               ),
             )}
           </ul>
-          <Button
-            size="lg"
-            className="mt-6 w-full"
-            onClick={() => {
-              signInDemo();
-              dialogRef.current?.close();
+          <a
+            href={href("/cuenta/entrar")}
+            // Set on click, not on render, so the return path is the page the user is on now.
+            onClick={(event) => {
+              event.currentTarget.href = loginUrl();
             }}
+            className={buttonClasses("primary", "lg", "mt-6 w-full")}
           >
             Continuar con Fluxer
-          </Button>
+          </a>
           <p className="mt-3 text-center text-sm text-fg-muted">
-            Esto es una demo: no se conecta a ninguna cuenta real.
+            Te llevamos a Fluxer para que lo confirmes y vuelves a esta página.
           </p>
         </div>
       </dialog>

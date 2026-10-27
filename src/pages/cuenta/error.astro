@@ -1,0 +1,27 @@
+---
+import { WarningCircleIcon } from "@phosphor-icons/react/ssr";
+import { ButtonLink } from "@/components/ui/Button";
+import Container from "@/components/ui/Container.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+
+export const prerender = false;
+
+const messages: Record<string, string> = {
+  cancelado: "Has cancelado el inicio de sesión en Fluxer. Puedes volver a intentarlo cuando quieras.",
+  estado: "El inicio de sesión ha caducado o se abrió en otra pestaña. Vuelve a intentarlo.",
+  fluxer: "Fluxer no ha respondido como esperábamos. Espera un momento y vuelve a intentarlo.",
+};
+const message = messages[Astro.url.searchParams.get("motivo") ?? ""] ?? messages.fluxer;
+---
+
+<SiteLayout title="No se ha podido entrar">
+  <Container class="flex flex-col items-center py-24 text-center">
+    <WarningCircleIcon size={56} aria-hidden className="text-primary" />
+    <h1 class="mt-6 text-3xl font-extrabold sm:text-4xl">No se ha podido entrar</h1>
+    <p class="mt-3 max-w-md text-lg text-fg-muted">{message}</p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <ButtonLink href="/cuenta/entrar">Entrar con Fluxer</ButtonLink>
+      <ButtonLink href="/" variant="secondary">Volver al inicio</ButtonLink>
+    </div>
+  </Container>
+</SiteLayout>
