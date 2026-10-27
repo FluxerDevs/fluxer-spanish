@@ -1,11 +1,18 @@
 ---
-import { ToolboxIcon } from "@phosphor-icons/react/ssr";
+import { PlusIcon, ToolboxIcon } from "@phosphor-icons/react/ssr";
 import { ToolCard } from "@/components/ecosystem/ToolCard";
+import { ButtonLink } from "@/components/ui/Button";
 import Container from "@/components/ui/Container.astro";
 import { PageHeader } from "@/components/ui/SectionHeader";
-import { toolGroupLabels, tools } from "@/data/tools";
+import { toolGroupLabels } from "@/data/tools";
 import SiteLayout from "@/layouts/SiteLayout.astro";
+import { listTools } from "@/lib/server/tools";
 import type { ToolGroup } from "@/lib/types";
+
+// Approved suggestions come from the database.
+export const prerender = false;
+
+const tools = await listTools();
 
 const groups = Object.keys(toolGroupLabels) as ToolGroup[];
 ---
@@ -16,16 +23,22 @@ const groups = Object.keys(toolGroupLabels) as ToolGroup[];
       title="Ecosistema"
       description="Webs, servicios y proyectos alrededor de Fluxer, con una explicación corta de para qué sirve cada uno."
     >
-      <nav aria-label="Grupos" class="mt-6 flex flex-wrap gap-2">
-        {groups.map((group) => (
-          <a
-            href={`#${group}`}
-            class="inline-flex min-h-10 items-center rounded-full border border-line bg-surface px-4 text-sm font-semibold hover:border-primary hover:text-primary"
-          >
-            {toolGroupLabels[group].title}
-          </a>
-        ))}
-      </nav>
+      <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+        <ButtonLink href="/ecosistema/sugerir" variant="secondary">
+          <PlusIcon size={18} weight="bold" aria-hidden />
+          Sugerir una herramienta
+        </ButtonLink>
+        <nav aria-label="Grupos" class="flex flex-wrap gap-2">
+          {groups.map((group) => (
+            <a
+              href={`#${group}`}
+              class="inline-flex min-h-10 items-center rounded-full border border-line bg-surface px-4 text-sm font-semibold hover:border-primary hover:text-primary"
+            >
+              {toolGroupLabels[group].title}
+            </a>
+          ))}
+        </nav>
+      </div>
     </PageHeader>
 
     <Container class="py-12 sm:py-16">

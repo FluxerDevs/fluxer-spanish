@@ -16,17 +16,17 @@ import { UpdateRow } from "@/components/updates/UpdateCard";
 import { ButtonLink } from "@/components/ui/Button";
 import Container from "@/components/ui/Container.astro";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { bots } from "@/data/bots";
-import { tools } from "@/data/tools";
 import { updates } from "@/data/updates";
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import { getGuides } from "@/lib/guides";
+import { listBots } from "@/lib/server/bots";
 import { listCommunities } from "@/lib/server/communities";
+import { listTools } from "@/lib/server/tools";
 
 // Shows approved communities, bots and tools from the database.
 export const prerender = false;
 
-const communities = await listCommunities();
+const [communities, bots, tools] = await Promise.all([listCommunities(), listBots(), listTools()]);
 
 const guides = await getGuides();
 const featuredGuides = [

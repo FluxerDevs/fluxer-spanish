@@ -1,0 +1,45 @@
+---
+import { ArrowLeftIcon, CheckIcon } from "@phosphor-icons/react/ssr";
+import { SuggestBotForm } from "@/components/bots/SuggestBotForm";
+import Container from "@/components/ui/Container.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { href } from "@/lib/url";
+
+const checklist = [
+  "Funciona en Fluxer y se puede invitar a cualquier servidor.",
+  "Está activo y responde a sus comandos.",
+  "No hace falta que lo hayas creado tú.",
+];
+---
+
+<SiteLayout title="Sugerir un bot" description="Sugiere un bot para el directorio de Fluxer Español.">
+  <Container class="py-10 sm:py-14">
+    <a href={href("/bots")} class="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-fg-muted hover:text-primary">
+      <ArrowLeftIcon size={16} aria-hidden />
+      Volver a los bots
+    </a>
+
+    <div class="mt-4 grid gap-10 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <h1 class="text-3xl font-extrabold sm:text-4xl">Sugerir un bot</h1>
+        <p class="mt-3 text-lg text-fg-muted">
+          ¿Conoces un bot que le vendría bien a la comunidad? Cuéntanos cuál es y lo añadimos al
+          directorio.
+        </p>
+        <div class="mt-8 rounded-2xl bg-surface-muted p-5">
+          <h2 class="font-heading font-bold">Antes de enviarlo, comprueba que:</h2>
+          <ul class="mt-3 space-y-2 text-[15px]">
+            {checklist.map((item) => (
+              <li class="flex gap-2">
+                <CheckIcon size={18} weight="bold" aria-hidden className="mt-0.5 shrink-0 text-success" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p class="mt-4 text-sm text-fg-muted">Probamos cada bot antes de añadirlo, normalmente en pocos días.</p>
+        </div>
+      </div>
+      <SuggestBotForm client:load />
+    </div>
+  </Container>
+</SiteLayout>
