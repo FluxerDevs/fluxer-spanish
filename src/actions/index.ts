@@ -3,11 +3,12 @@ import { z } from "astro/zod";
 import { botCategoryLabels, botLanguageLabels } from "@/data/bots";
 import { communityTopicLabels } from "@/data/community";
 import { toolGroupLabels } from "@/data/tools";
-import { getAccessToken, getUser } from "@/lib/server/auth";
+import { getAccessToken, getUser, isStaff } from "@/lib/server/auth";
 import { submitBot } from "@/lib/server/bots";
 import { submitCommunity } from "@/lib/server/communities";
 import { listFavoriteIds, setFavorite } from "@/lib/server/favorites";
 import { FluxerError } from "@/lib/server/fluxer";
+import { reviewSubmission } from "@/lib/server/moderation";
 import { submitTool } from "@/lib/server/tools";
 import type { BotCategory, BotLanguage, CommunityTopic, ToolGroup } from "@/lib/types";
 
@@ -98,6 +99,27 @@ export const server = {
       const result = await setFavorite(user.id, guideId, saved);
       if (result === null) throw new ActionError({ code: "NOT_FOUND", message: "Esta guía ya no existe." });
       return result;
+    },
+  }),
+
+  /** Staff only. Called from the plain HTML forms on /moderacion. */
+  reviewSubmission: defineAction({
+    accept: "form",
+    input: z.object({
+      kind: z.enum(["community", "bot", "tool"]),
+      id: z.coerce.number().int().positive(),
+      decision: z.enum(["approve", "reject"]),
+      note: z.string().trim().max(500).optional(),
+    }),
+    handler: async ({ kind, id, decision, note }, context) => {
+      const user = await requireUser(context);
+      if (!isStaff(user.id)) throw new ActionError({ code: "FORBIDDEN", message: "Solo el equipo puede moderar." });
+      if (decision === "reject" && !note) {
+        throw new ActionError({ code: "BAD_REQUEST", message: "Escribe el motivo para que quien lo envió sepa qué cambiar." });
+      }
+      const done = await reviewSubmission({ kind, id, decision, note: note || null, reviewerId: user.id });
+      if (!done) throw new ActionError({ code: "CONFLICT", message: "Otra persona del equipo ya lo ha revisado." });
+      return { kind, id, decision };
     },
   }),
 };
